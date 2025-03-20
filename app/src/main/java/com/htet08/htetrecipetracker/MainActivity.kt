@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +18,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,17 +54,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun RecipeMainLayout(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxSize()) {
-        // Top bar
-        RecipeTopAppBar()
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFFF3E9D1)) // Light warm background
+    ) {
+        Column(modifier = modifier.fillMaxSize()) {
+            // Top bar
+            RecipeTopAppBar()
 
 
-        // Main content
-        RecipeMainMenu(modifier = Modifier.weight(1f))
+            // Main content
+            RecipeMainMenu(modifier = Modifier.weight(1f))
 
 
-        // Bottom bar
-        RecipeBottomAppBar()
+            // Bottom bar
+            RecipeBottomAppBar()
+        }
     }
 }
 
@@ -70,7 +81,7 @@ fun RecipeTopAppBar(modifier: Modifier = Modifier) {
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)  // Adjust height as needed
-            .background(Color(0xFFFFA500)), // Use your chosen color here
+            .background(Color(0xFFF3B245)), // Use your chosen color here
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -93,11 +104,20 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
             ) {
                 Button(
                     onClick = { /* Button 1 action */ },
-                    modifier = Modifier.width(150.dp)
+                    modifier = Modifier.width(150.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFF3AA35), // Green background
+                        contentColor = Color.White // White text
+                    )
                 ) {
                     Column (horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Create Recipe")
-                        Text("(CreateRecipeIcon)")
+                        Image(
+                            painter = painterResource(id = R.drawable.createrecipeicon),
+                            contentDescription = "CreateRecipeIcon",
+                            modifier = Modifier.size(80.dp)
+                        )
                     }
                 }
                 Button(
@@ -106,7 +126,7 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
                 ) {
                     Column (horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Recipe List")
-                        Text("(RecipeListIcon)")
+                        Text("RecipeListIcon")
                     }
                 }
             }
@@ -119,8 +139,8 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
                 modifier = Modifier.width(150.dp)
             ) {
                 Column (horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Recipe List")
-                    Text("(RecipeListIcon)")
+                    Text("Cooking History")
+                    Text("(CookingHistoryIcon)")
                 }
             }
         }
@@ -136,7 +156,7 @@ fun RecipeBottomAppBar(modifier: Modifier = Modifier) {
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)  // Adjust height as needed
-            .background(Color(0xFFFFA500)), // Use your chosen color here
+            .background(Color(0xFFF3B245)), // Use your chosen color here
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -149,7 +169,7 @@ fun RecipeBottomAppBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun MainLayoutPreview() {
+fun RecipeMainLayoutPreview() {
     HtetRecipeTrackerTheme {
         RecipeMainLayout()
     }
