@@ -1,4 +1,4 @@
-package com.htet08.htetrecipetracker.ui.theme
+package com.htet08.myrecipetracker.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

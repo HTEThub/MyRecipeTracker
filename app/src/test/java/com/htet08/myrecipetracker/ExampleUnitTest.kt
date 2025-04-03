@@ -1,4 +1,4 @@
-package com.htet08.htetrecipetracker
+package com.htet08.myrecipetracker
 
 import org.junit.Test
 

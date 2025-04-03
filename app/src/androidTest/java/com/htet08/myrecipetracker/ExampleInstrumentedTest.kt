@@ -1,4 +1,4 @@
-package com.htet08.htetrecipetracker
+package com.htet08.myrecipetracker
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

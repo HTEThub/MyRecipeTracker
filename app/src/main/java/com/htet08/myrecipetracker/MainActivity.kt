@@ -1,4 +1,4 @@
-package com.htet08.htetrecipetracker
+package com.htet08.myrecipetracker
 
 //import androidx.compose.foundation.layout.ColumnScopeInstance.weight
 import android.os.Bundle
@@ -28,19 +28,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.htet08.htetrecipetracker.ui.theme.HtetRecipeTrackerTheme
+import androidx.compose.ui.unit.sp
+import com.htet08.htetrecipetracker.R
+import com.htet08.myrecipetracker.ui.theme.MyRecipeTrackerTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HtetRecipeTrackerTheme {
+            MyRecipeTrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     RecipeMainLayout(
 //                        name = "Android",
@@ -104,7 +109,8 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
             ) {
                 Button(
                     onClick = { /* Button 1 action */ },
-                    modifier = Modifier.width(150.dp),
+                    modifier = Modifier.width(150.dp)
+                        .height(175.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFF3AA35), // Green background
@@ -112,21 +118,37 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
                     )
                 ) {
                     Column (horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Create Recipe")
+                        Text("Create Recipe",
+                            fontSize = 25.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 30.sp)
                         Image(
-                            painter = painterResource(id = R.drawable.createrecipeicon),
+                            painter = painterResource(id = R.drawable.create_recipe_icon),
                             contentDescription = "CreateRecipeIcon",
-                            modifier = Modifier.size(80.dp)
+                            modifier = Modifier.size(90.dp)
                         )
                     }
                 }
                 Button(
                     onClick = { /* Button 2 action */ },
                     modifier = Modifier.width(150.dp)
+                        .height(175.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFF3AA35),
+                        contentColor = Color.White
+                    )
                 ) {
                     Column (horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Recipe List")
-                        Text("RecipeListIcon")
+                        Text("Recipe List",
+                            fontSize = 25.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 30.sp)
+                        Image(
+                            painter = painterResource(id = R.drawable.recipe_book_icon),
+                            contentDescription = "RecipeBookIcon",
+//                            modifier = Modifier.size(100.dp)
+                        )
                     }
                 }
             }
@@ -135,12 +157,25 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
 
 
             Button(
-                onClick = { /* Button 3 action */ },
+                onClick = { /* Button 2 action */ },
                 modifier = Modifier.width(150.dp)
+                    .height(175.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFF3AA35),
+                    contentColor = Color.White
+                )
             ) {
                 Column (horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Cooking History")
-                    Text("(CookingHistoryIcon)")
+                    Text("Cooking History",
+                        fontSize = 25.sp,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 30.sp)
+                    Image(
+                        painter = painterResource(id = R.drawable.cooking_history_icon),
+                        contentDescription = "CookingHistoryIcon",
+//                            modifier = Modifier.size(100.dp)
+                    )
                 }
             }
         }
@@ -170,7 +205,7 @@ fun RecipeBottomAppBar(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun RecipeMainLayoutPreview() {
-    HtetRecipeTrackerTheme {
+    MyRecipeTrackerTheme {
         RecipeMainLayout()
     }
 }
