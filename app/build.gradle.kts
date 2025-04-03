@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.htet08.htetrecipetracker"
+    namespace = "com.htet08.myrecipetracker"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.htet08.htetrecipetracker"
+        applicationId = "com.htet08.myrecipetracker"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
