@@ -74,14 +74,16 @@ fun RecipeTopAppBar(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)  // Adjust height as needed
+            .height(75.dp)  // Adjust height as needed
             .background(Color(0xFFF3B245)), // Your chosen color
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.app_name),
-            color = Color.White
+            text = "My Recipe Tracker",
+            color = Color.White,
+            fontSize = 25.sp,
+            modifier = Modifier.padding(15.dp)
         )
     }
 }
@@ -181,26 +183,24 @@ fun RecipeMainMenu(modifier: Modifier = Modifier) {
     }
 }
 
-
-
 @Composable
 fun RecipeBottomAppBar(modifier: Modifier = Modifier) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(75.dp)
             .background(Color(0xFFF3B245)), // Your chosen color
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Bottom Bar",
-            color = Color.White
+            text = "",
+            color = Color.White,
+            fontSize = 25.sp,
+            modifier = Modifier.padding(10.dp)
         )
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable
