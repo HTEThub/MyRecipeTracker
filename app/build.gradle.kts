@@ -68,4 +68,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     androidTestImplementation("androidx.room:room-testing:2.6.1")
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+
+
 }// Room testing

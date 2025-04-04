@@ -68,7 +68,8 @@ fun CreateRecipeScreen(navController: NavHostController) {
             // Clickable image box
             Box(
                 modifier = Modifier
-                    .size(200.dp)
+                    .fillMaxWidth()
+                    .height(220.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(Color.LightGray)
                     .clickable {
@@ -79,12 +80,16 @@ fun CreateRecipeScreen(navController: NavHostController) {
                 if (imageUri != null) {
                     Image(
                         painter = rememberAsyncImagePainter(imageUri),
-                        contentDescription = "Selected Image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    Text(text = "Tap to select image", color = Color.DarkGray)
+                    Text(
+                        text = "Tap to select image",
+                        color = Color.DarkGray,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
             }
 
@@ -101,6 +106,9 @@ fun CreateRecipeScreen(navController: NavHostController) {
         }
     }
 }
+
+
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
