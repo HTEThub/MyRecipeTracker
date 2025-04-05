@@ -5,4 +5,5 @@ object Routes {
     const val CREATE_RECIPE = "create_recipe"
     const val RECIPE_LIST = "recipe_list"
     const val COOKING_HISTORY = "cooking_history"
+    const val ADD_TAGS = "add_tags"
 }

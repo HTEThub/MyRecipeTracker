@@ -43,6 +43,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -51,15 +52,23 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import com.htet08.myrecipetracker.R
 import com.htet08.myrecipetracker.model.InstructionStepData
+import com.htet08.myrecipetracker.navigation.Routes
 
 
 @Composable
-fun CreateRecipeScreen(navController: NavHostController) {
+fun CreatingRecipeScreen(navController: NavHostController) {
     val focusManager = LocalFocusManager.current
     var dynamicSteps by remember { mutableStateOf(listOf<InstructionStepData>()) }
 
     Scaffold(
-        topBar = { RecipeTopAppBar(title = "Create Recipe") },
+        topBar = {
+            RecipeTopAppBar(
+                title = "Create Recipe",
+                rightContent = {
+                    TextButton(onClick = { navController.navigate(Routes.ADD_TAGS) }) {
+                        Text("Next", color = Color.White)
+                    }
+                }) },
         bottomBar = { RecipeBottomAppBar() }
     ) { innerPadding ->
         val scrollState = rememberScrollState()
@@ -408,6 +417,6 @@ fun InstructionStep(
 @Composable
 fun CreateRecipeScreenPreview() {
     val navController = rememberNavController()
-    CreateRecipeScreen(navController = navController)
+    CreatingRecipeScreen(navController = navController)
 }
 

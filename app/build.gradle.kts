@@ -56,10 +56,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+//    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 
 
     //room for db
@@ -68,6 +69,10 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     androidTestImplementation("androidx.room:room-testing:2.6.1")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.compose.foundation:foundation") // ✅ Explicitly include foundation
+
+
+
 
 
 

@@ -2,7 +2,7 @@ package com.htet08.myrecipetracker.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen.CreateRecipeScreen
+import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen.CreatingRecipeScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,6 +12,7 @@ import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.ui.screens.HomeScreen
 import androidx.compose.ui.Modifier
+import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen.AddTagsToRecipeScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
@@ -35,7 +36,11 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 
         }
         composable(Routes.CREATE_RECIPE) {
-            CreateRecipeScreen(navController = navController)
+            CreatingRecipeScreen(navController = navController)
+        }
+
+        composable(Routes.ADD_TAGS) {
+            AddTagsToRecipeScreen(navController)
         }
     }
 }
