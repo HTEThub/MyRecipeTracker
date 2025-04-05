@@ -14,23 +14,41 @@ import androidx.compose.ui.unit.sp
 fun RecipeTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
+    leftContent: @Composable (() -> Unit)? = null,
     rightContent: @Composable (() -> Unit)? = null
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .height(75.dp)
             .background(Color(0xFFF3B245))
             .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.SpaceBetween
+        contentAlignment = Alignment.Center
     ) {
+        // Title in the center
         Text(
             text = title,
             color = Color.White,
-            fontSize = 25.sp,
-            modifier = Modifier.align(Alignment.CenterVertically)
+            fontSize = 25.sp
         )
-        rightContent?.invoke()
+
+        // Left content (e.g., back button)
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterStart),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            leftContent?.invoke()
+        }
+
+        // Right content (e.g., next button)
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterEnd),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            rightContent?.invoke()
+        }
     }
 }
+

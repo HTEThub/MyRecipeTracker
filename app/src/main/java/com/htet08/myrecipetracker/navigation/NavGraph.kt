@@ -2,7 +2,7 @@ package com.htet08.myrecipetracker.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen
+import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen.CreateRecipeScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.ui.screens.HomeScreen
-import com.htet08.myrecipetracker.navigation.Routes
 import androidx.compose.ui.Modifier
 
 @Composable
