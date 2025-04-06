@@ -69,8 +69,6 @@ fun CreatingRecipeScreen(
     var dynamicSteps by viewModel.dynamicSteps
     var showCancelDialog by remember { mutableStateOf(false) }
 
-
-
     Scaffold(
         topBar = {
             RecipeTopAppBar(

@@ -71,6 +71,8 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.foundation:foundation") // ✅ Explicitly include foundation
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("com.google.code.gson:gson:2.10.1")
+
 
 
 

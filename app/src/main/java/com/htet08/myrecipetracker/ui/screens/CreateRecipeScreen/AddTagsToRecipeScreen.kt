@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.htet08.myrecipetracker.model.CustomTag
+import com.htet08.myrecipetracker.navigation.Routes
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
@@ -96,6 +97,20 @@ fun AddTagsToRecipeScreen(
         focusManager.clearFocus()
     }
 
+    fun saveRecipe() {
+        if (viewModel.title.value.isBlank()) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar("Please enter a title before saving your recipe.")
+            }
+        } else {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar("Recipe saved successfully!")
+            }
+            viewModel.clearForm()
+            navController.popBackStack(Routes.HOME, inclusive = false)
+        }
+    }
+
     Scaffold(
         topBar = {
             RecipeTopAppBar(
@@ -115,7 +130,7 @@ fun AddTagsToRecipeScreen(
                 rightContent = {
                     TextButton(onClick = {
                         handleBackOrSave()
-                        // TODO: Save action
+                        saveRecipe()
                     }) {
                         Text(
                             text = "Save",
