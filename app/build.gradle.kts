@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.engage.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,6 +73,14 @@ dependencies {
     implementation("androidx.compose.foundation:foundation") // ✅ Explicitly include foundation
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Room Database
+    implementation ("androidx.room:room-runtime:2.5.0")
+    annotationProcessor ("androidx.room:room-compiler:2.5.0") // For Java users
+    kapt ("androidx.room:room-compiler:2.5.0") // For Kotlin users
+
+    // Coroutines support for Room
+    implementation ("androidx.room:room-ktx:2.5.0")
 
 
 

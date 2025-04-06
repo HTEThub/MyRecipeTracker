@@ -47,14 +47,17 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.htet08.myrecipetracker.data.RecipeDatabase
 import com.htet08.myrecipetracker.model.CustomTag
 import com.htet08.myrecipetracker.navigation.Routes
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
@@ -81,6 +84,12 @@ fun AddTagsToRecipeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
+    val context = LocalContext.current
+    val db = RecipeDatabase.getDatabase(context) // Get the database
+    val recipeDao = db.recipeDao() // Get the RecipeDao
+    val viewModel: RecipeFormViewModel = viewModel()
+
+
     fun handleBackOrSave() {
         val tag = newTagText.trim()
         if (tag.isNotBlank()) {
@@ -106,7 +115,7 @@ fun AddTagsToRecipeScreen(
             coroutineScope.launch {
                 snackbarHostState.showSnackbar("Recipe saved successfully!")
             }
-            viewModel.clearForm()
+            viewModel.saveRecipe()
             navController.popBackStack(Routes.HOME, inclusive = false)
         }
     }
@@ -371,13 +380,13 @@ fun TagChip(
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun AddTagsToRecipeScreenPreview() {
-    val navController = rememberNavController()
-    val dummyViewModel = remember { RecipeFormViewModel() }
-    AddTagsToRecipeScreen(
-        navController = navController,
-        viewModel = dummyViewModel
-    )
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun AddTagsToRecipeScreenPreview() {
+//    val navController = rememberNavController()
+//    val dummyViewModel = remember { RecipeFormViewModel() }
+//    AddTagsToRecipeScreen(
+//        navController = navController,
+//        viewModel = dummyViewModel
+//    )
+//}

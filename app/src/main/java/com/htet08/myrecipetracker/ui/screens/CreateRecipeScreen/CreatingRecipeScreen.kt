@@ -52,6 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import com.htet08.myrecipetracker.R
+import com.htet08.myrecipetracker.data.RecipeDatabase
 import com.htet08.myrecipetracker.model.InstructionStepData
 import com.htet08.myrecipetracker.navigation.Routes
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
@@ -65,6 +66,10 @@ fun CreatingRecipeScreen(
     viewModel: RecipeFormViewModel
 ) {
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
+    val db = RecipeDatabase.getDatabase(context) // Get the database
+    val recipeDao = db.recipeDao() // Get the RecipeDao
+//    val viewModel: RecipeFormViewModel = viewModel()
 
     var dynamicSteps by viewModel.dynamicSteps
     var showCancelDialog by remember { mutableStateOf(false) }
@@ -488,13 +493,13 @@ fun InstructionStep(
 }
 
 
-@Preview(showBackground = true, heightDp = 1000, showSystemUi = true)
-@Composable
-fun CreateRecipeScreenPreview() {
-    val navController = rememberNavController()
-    val dummyViewModel = remember { RecipeFormViewModel() }
-    CreatingRecipeScreen(
-        navController = navController,
-        viewModel = dummyViewModel)
-}
+//@Preview(showBackground = true, heightDp = 1000, showSystemUi = true)
+//@Composable
+//fun CreateRecipeScreenPreview() {
+//    val navController = rememberNavController()
+//    val dummyViewModel = remember { RecipeFormViewModel() }
+//    CreatingRecipeScreen(
+//        navController = navController,
+//        viewModel = dummyViewModel)
+//}
 
