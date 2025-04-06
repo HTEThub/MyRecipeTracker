@@ -80,12 +80,31 @@ fun AddTagsToRecipeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
+    fun handleBackOrSave() {
+        val tag = newTagText.trim()
+        if (tag.isNotBlank()) {
+            if (customTags.none { it.text == tag }) {
+                viewModel.customTags.value = customTags + CustomTag(text = tag)
+            } else {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("Tag \"$tag\" already exists")
+                }
+            }
+        }
+        viewModel.newTagText.value = ""
+        viewModel.showTagInput.value = false
+        focusManager.clearFocus()
+    }
+
     Scaffold(
         topBar = {
             RecipeTopAppBar(
                 title = "Select Tags",
                 leftContent = {
-                    TextButton(onClick = { navController.popBackStack() }) {
+                    TextButton(onClick = {
+                        handleBackOrSave()
+                        navController.popBackStack()
+                    }) {
                         Text(
                             text = "Back",
                             color = Color.White,
@@ -94,7 +113,10 @@ fun AddTagsToRecipeScreen(
                     }
                 },
                 rightContent = {
-                    TextButton(onClick = { /* TODO: Handle save */ }) {
+                    TextButton(onClick = {
+                        handleBackOrSave()
+                        // TODO: Save action
+                    }) {
                         Text(
                             text = "Save",
                             color = Color.White,

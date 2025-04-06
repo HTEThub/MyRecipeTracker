@@ -37,4 +37,18 @@ class RecipeFormViewModel : ViewModel() {
     )
     val showTagInput = mutableStateOf(false)
     val newTagText = mutableStateOf("")
+
+    fun clearForm() {
+        title.value = ""
+        ingredients.value = ""
+        imageUri.value = null
+        step1ImageUri.value = null
+        step1Text.value = ""
+        dynamicSteps.value = emptyList()
+        customTags.value = emptyList()
+        dietaryTags.value = dietaryTags.value.map { it.copy(selected = false) }
+        showTagInput.value = false
+        newTagText.value = ""
+    }
 }
+

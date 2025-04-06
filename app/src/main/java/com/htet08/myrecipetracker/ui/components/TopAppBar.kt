@@ -22,33 +22,38 @@ fun RecipeTopAppBar(
             .fillMaxWidth()
             .height(75.dp)
             .background(Color(0xFFF3B245))
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 16.dp)
     ) {
-        // Title in the center
+        // Left aligned content (e.g. Cancel)
+        leftContent?.let {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterStart),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                it()
+            }
+        }
+
+        // Title centered absolutely
         Text(
             text = title,
             color = Color.White,
-            fontSize = 25.sp
+            fontSize = 25.sp,
+            modifier = Modifier.align(Alignment.Center)
         )
 
-        // Left content (e.g., back button)
-        Row(
-            modifier = Modifier
-                .align(Alignment.CenterStart),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            leftContent?.invoke()
-        }
-
-        // Right content (e.g., next button)
-        Row(
-            modifier = Modifier
-                .align(Alignment.CenterEnd),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            rightContent?.invoke()
+        // Right aligned content (e.g. Next)
+        rightContent?.let {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                it()
+            }
         }
     }
 }
+
 

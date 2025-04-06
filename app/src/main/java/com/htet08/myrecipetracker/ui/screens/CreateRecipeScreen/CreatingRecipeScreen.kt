@@ -39,6 +39,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,6 +55,8 @@ import com.htet08.myrecipetracker.R
 import com.htet08.myrecipetracker.model.InstructionStepData
 import com.htet08.myrecipetracker.navigation.Routes
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
+import com.htet08.myrecipetracker.ui.components.ConfirmDialogPopup
+
 
 
 @Composable
@@ -62,12 +65,28 @@ fun CreatingRecipeScreen(
     viewModel: RecipeFormViewModel
 ) {
     val focusManager = LocalFocusManager.current
+
     var dynamicSteps by viewModel.dynamicSteps
+    var showCancelDialog by remember { mutableStateOf(false) }
+
+
 
     Scaffold(
         topBar = {
             RecipeTopAppBar(
                 title = "Create Recipe",
+                leftContent = {
+                    TextButton(
+                        onClick = { showCancelDialog = true },
+                        contentPadding = PaddingValues(start = 0.dp)
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            color = Color.White,
+                            fontSize = 25.sp
+                        )
+                    }
+                },
                 rightContent = {
                     TextButton(onClick = { navController.navigate(Routes.ADD_TAGS) }) {
                         Text(
@@ -76,7 +95,9 @@ fun CreatingRecipeScreen(
                             fontSize = 25.sp
                         )
                     }
-                }) },
+                }
+            )
+        },
         bottomBar = { RecipeBottomAppBar() }
     ) { innerPadding ->
         val scrollState = rememberScrollState()
@@ -224,6 +245,64 @@ fun CreatingRecipeScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
+
+        ConfirmDialogPopup(
+            showDialog = showCancelDialog,
+            onDismiss = { showCancelDialog = false },
+            title = "Cancel Recipe",
+            message = "Would you like to cancel recipe creation?",
+            onConfirm = {
+                showCancelDialog = false
+                viewModel.clearForm()
+                navController.popBackStack(Routes.HOME, inclusive = false)
+            },
+            onExtraAction = {
+                // Save as Draft - placeholder
+                showCancelDialog = false
+            }
+        )
+
+    }
+
+    if (showCancelDialog) {
+        AlertDialog(
+            onDismissRequest = { showCancelDialog = false },
+            title = { Text("Cancel Recipe") },
+            text = { Text("Would you like to cancel recipe creation?") },
+            confirmButton = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row {
+                        TextButton(
+                            onClick = {
+                                showCancelDialog = false
+                                viewModel.clearForm()
+                                navController.popBackStack(Routes.HOME, inclusive = false)
+                            }
+                        ) {
+                            Text("Yes")
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        TextButton(onClick = {
+                            showCancelDialog = false
+                        }) {
+                            Text("No")
+                        }
+                    }
+
+                    TextButton(onClick = {
+                        // Save as Draft (placeholder)
+                        showCancelDialog = false
+                    }) {
+                        Text("Save as Draft")
+                    }
+                }
+            },
+        )
     }
 }
 

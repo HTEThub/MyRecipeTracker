@@ -20,9 +20,9 @@ import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
     val recipeFormViewModel: RecipeFormViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = Routes.MAIN) {
+    NavHost(navController = navController, startDestination = Routes.HOME) {
 
-        composable(Routes.MAIN) {
+        composable(Routes.HOME) {
             Scaffold(
                 topBar = {
                     RecipeTopAppBar(title = "My Recipe Tracker")
