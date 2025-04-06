@@ -53,12 +53,16 @@ import androidx.compose.ui.text.style.TextAlign
 import com.htet08.myrecipetracker.R
 import com.htet08.myrecipetracker.model.InstructionStepData
 import com.htet08.myrecipetracker.navigation.Routes
+import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 
 
 @Composable
-fun CreatingRecipeScreen(navController: NavHostController) {
+fun CreatingRecipeScreen(
+    navController: NavHostController,
+    viewModel: RecipeFormViewModel
+) {
     val focusManager = LocalFocusManager.current
-    var dynamicSteps by remember { mutableStateOf(listOf<InstructionStepData>()) }
+    var dynamicSteps by viewModel.dynamicSteps
 
     Scaffold(
         topBar = {
@@ -66,7 +70,11 @@ fun CreatingRecipeScreen(navController: NavHostController) {
                 title = "Create Recipe",
                 rightContent = {
                     TextButton(onClick = { navController.navigate(Routes.ADD_TAGS) }) {
-                        Text("Next", color = Color.White)
+                        Text(
+                            text = "Next",
+                            color = Color.White,
+                            fontSize = 25.sp
+                        )
                     }
                 }) },
         bottomBar = { RecipeBottomAppBar() }
@@ -74,10 +82,11 @@ fun CreatingRecipeScreen(navController: NavHostController) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
 
-        var imageUri by remember { mutableStateOf<Uri?>(null) }
-        var step1ImageUri by remember { mutableStateOf<Uri?>(null) }
-        var title by remember { mutableStateOf("") }
-        var ingredients by remember { mutableStateOf("") }
+        var imageUri by viewModel.imageUri
+        var step1ImageUri by viewModel.step1ImageUri
+        var step1 by viewModel.step1Text
+        var title by viewModel.title
+        var ingredients by viewModel.ingredients
 
         val imagePickerLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
@@ -128,22 +137,16 @@ fun CreatingRecipeScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Instructions title
             Text(
                 text = "Instructions",
                 fontSize = 20.sp,
                 color = Color.Black,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            var step1 by remember { mutableStateOf("") }
-
-
-            // Step 1 (always shown)
             InstructionStep(
                 stepNumber = 1,
                 instruction = step1,
@@ -169,9 +172,7 @@ fun CreatingRecipeScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Dynamic additional steps
             dynamicSteps.forEachIndexed { index, step ->
-                // Create launcher for this specific step
                 val launcher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.GetContent()
                 ) { uri: Uri? ->
@@ -183,7 +184,7 @@ fun CreatingRecipeScreen(navController: NavHostController) {
                 }
 
                 InstructionStep(
-                    stepNumber = index + 2, // Step 2, 3, 4...
+                    stepNumber = index + 2,
                     instruction = step.text,
                     onInstructionChange = { newText ->
                         dynamicSteps = dynamicSteps.toMutableList().apply {
@@ -203,7 +204,7 @@ fun CreatingRecipeScreen(navController: NavHostController) {
                         }
                     }
                 )
-                // 🔽 Add Step Button (in-between)
+
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
@@ -225,6 +226,7 @@ fun CreatingRecipeScreen(navController: NavHostController) {
         }
     }
 }
+
 
 
 @Composable
@@ -409,14 +411,13 @@ fun InstructionStep(
 }
 
 
-
-
-
-
 @Preview(showBackground = true, heightDp = 1000, showSystemUi = true)
 @Composable
 fun CreateRecipeScreenPreview() {
     val navController = rememberNavController()
-    CreatingRecipeScreen(navController = navController)
+    val dummyViewModel = remember { RecipeFormViewModel() }
+    CreatingRecipeScreen(
+        navController = navController,
+        viewModel = dummyViewModel)
 }
 

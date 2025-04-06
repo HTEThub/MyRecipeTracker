@@ -58,6 +58,7 @@ import androidx.navigation.compose.rememberNavController
 import com.htet08.myrecipetracker.model.CustomTag
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
+import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,26 +66,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun AddTagsToRecipeScreen(navController: NavHostController) {
-    var customTags by remember { mutableStateOf(listOf<CustomTag>()) }
-    var showTagInput by remember { mutableStateOf(false) }
-    var newTagText by remember { mutableStateOf("") }
-    var dietaryTags by remember {
-        mutableStateOf(
-            listOf(
-                CustomTag("Vegetarian"),
-                CustomTag("Vegan"),
-                CustomTag("Gluten-Free"),
-                CustomTag("Dairy-Free"),
-                CustomTag("Nut-Free"),
-                CustomTag("Low-Carb"),
-                CustomTag("High-Protein"),
-                CustomTag("Keto"),
-                CustomTag("Paleo"),
-                CustomTag("Halal")
-            )
-        )
-    }
+fun AddTagsToRecipeScreen(
+    navController: NavHostController,
+    viewModel: RecipeFormViewModel
+) {
+    val customTags by viewModel.customTags
+    val showTagInput by viewModel.showTagInput
+    val newTagText by viewModel.newTagText
+    val dietaryTags by viewModel.dietaryTags
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -96,7 +85,7 @@ fun AddTagsToRecipeScreen(navController: NavHostController) {
             RecipeTopAppBar(
                 title = "Select Tags",
                 leftContent = {
-                    TextButton(onClick = { /* TODO: Handle back */ }) {
+                    TextButton(onClick = { navController.popBackStack() }) {
                         Text(
                             text = "Back",
                             color = Color.White,
@@ -149,18 +138,11 @@ fun AddTagsToRecipeScreen(navController: NavHostController) {
     ) { innerPadding ->
         TagInputLayout(
             innerPadding = innerPadding,
-            customTags = customTags,
-            showTagInput = showTagInput,
-            newTagText = newTagText,
             focusRequester = focusRequester,
             focusManager = focusManager,
             snackbarHostState = snackbarHostState,
             coroutineScope = coroutineScope,
-            onTagsUpdated = { customTags = it },
-            onShowInputChanged = { showTagInput = it },
-            onNewTagTextChanged = { newTagText = it },
-            dietaryTags = dietaryTags,
-            onDietaryTagsUpdated = { dietaryTags = it }
+            viewModel = viewModel
         )
     }
 }
@@ -169,19 +151,17 @@ fun AddTagsToRecipeScreen(navController: NavHostController) {
 @Composable
 private fun TagInputLayout(
     innerPadding: PaddingValues,
-    customTags: List<CustomTag>,
-    showTagInput: Boolean,
-    newTagText: String,
     focusRequester: FocusRequester,
     focusManager: FocusManager,
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
-    onTagsUpdated: (List<CustomTag>) -> Unit,
-    onShowInputChanged: (Boolean) -> Unit,
-    onNewTagTextChanged: (String) -> Unit,
-    dietaryTags: List<CustomTag>,
-    onDietaryTagsUpdated: (List<CustomTag>) -> Unit
+    viewModel: RecipeFormViewModel
 ) {
+    val customTags by viewModel.customTags
+    val showTagInput by viewModel.showTagInput
+    val newTagText by viewModel.newTagText
+    val dietaryTags by viewModel.dietaryTags
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -193,15 +173,15 @@ private fun TagInputLayout(
                     val tag = newTagText.trim()
                     if (tag.isNotBlank()) {
                         if (customTags.none { it.text == tag }) {
-                            onTagsUpdated(customTags + CustomTag(text = tag))
+                            viewModel.customTags.value = customTags + CustomTag(text = tag)
                         } else {
                             coroutineScope.launch {
                                 snackbarHostState.showSnackbar("Tag \"$tag\" already exists")
                             }
                         }
                     }
-                    onNewTagTextChanged("")
-                    onShowInputChanged(false)
+                    viewModel.newTagText.value = ""
+                    viewModel.showTagInput.value = false
                     focusManager.clearFocus()
                 })
             }
@@ -223,14 +203,14 @@ private fun TagInputLayout(
                     text = tag.text,
                     isSelected = tag.selected,
                     onClick = {
-                        onTagsUpdated(customTags.toMutableList().apply {
+                        viewModel.customTags.value = customTags.toMutableList().apply {
                             set(index, get(index).copy(selected = !tag.selected))
-                        })
+                        }
                     },
                     onDelete = {
-                        onTagsUpdated(customTags.toMutableList().apply {
+                        viewModel.customTags.value = customTags.toMutableList().apply {
                             removeAt(index)
-                        })
+                        }
                     }
                 )
             }
@@ -238,7 +218,7 @@ private fun TagInputLayout(
             if (showTagInput) {
                 OutlinedTextField(
                     value = newTagText,
-                    onValueChange = onNewTagTextChanged,
+                    onValueChange = { viewModel.newTagText.value = it },
                     placeholder = { Text("Enter tag") },
                     singleLine = true,
                     modifier = Modifier
@@ -250,15 +230,15 @@ private fun TagInputLayout(
                             val tag = newTagText.trim()
                             if (tag.isNotBlank()) {
                                 if (customTags.none { it.text == tag }) {
-                                    onTagsUpdated(customTags + CustomTag(text = tag))
+                                    viewModel.customTags.value = customTags + CustomTag(text = tag)
                                 } else {
                                     coroutineScope.launch {
                                         snackbarHostState.showSnackbar("Tag \"$tag\" already exists")
                                     }
                                 }
                             }
-                            onNewTagTextChanged("")
-                            onShowInputChanged(false)
+                            viewModel.newTagText.value = ""
+                            viewModel.showTagInput.value = false
                             focusManager.clearFocus()
                         }
                     )
@@ -273,7 +253,7 @@ private fun TagInputLayout(
             } else {
                 TagChip(
                     text = "+",
-                    onClick = { onShowInputChanged(true) }
+                    onClick = { viewModel.showTagInput.value = true }
                 )
             }
         }
@@ -297,15 +277,16 @@ private fun TagInputLayout(
                     text = tag.text,
                     isSelected = tag.selected,
                     onClick = {
-                        onDietaryTagsUpdated(dietaryTags.toMutableList().apply {
+                        viewModel.dietaryTags.value = dietaryTags.toMutableList().apply {
                             set(index, get(index).copy(selected = !tag.selected))
-                        })
+                        }
                     }
                 )
             }
         }
     }
 }
+
 
 
 @Composable
@@ -357,6 +338,9 @@ fun TagChip(
 @Composable
 fun AddTagsToRecipeScreenPreview() {
     val navController = rememberNavController()
-    AddTagsToRecipeScreen(navController = navController)
+    val dummyViewModel = remember { RecipeFormViewModel() }
+    AddTagsToRecipeScreen(
+        navController = navController,
+        viewModel = dummyViewModel
+    )
 }
-

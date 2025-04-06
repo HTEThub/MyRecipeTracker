@@ -12,10 +12,14 @@ import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.ui.screens.HomeScreen
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen.AddTagsToRecipeScreen
+import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController = rememberNavController()) {
+    val recipeFormViewModel: RecipeFormViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = Routes.MAIN) {
 
         composable(Routes.MAIN) {
@@ -36,11 +40,14 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
 
         }
         composable(Routes.CREATE_RECIPE) {
-            CreatingRecipeScreen(navController = navController)
+            CreatingRecipeScreen(
+                navController = navController,
+                viewModel = recipeFormViewModel)
         }
 
         composable(Routes.ADD_TAGS) {
-            AddTagsToRecipeScreen(navController)
+            AddTagsToRecipeScreen(navController,
+                viewModel = recipeFormViewModel)
         }
     }
 }
