@@ -45,6 +45,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -69,6 +70,11 @@ fun CreatingRecipeScreen(
 
     var dynamicSteps by viewModel.dynamicSteps
     var showCancelDialog by remember { mutableStateOf(false) }
+
+//    // Reset cancel dialog state when the screen is composed
+//    LaunchedEffect(Unit) {
+//        showCancelDialog = false
+//    }
 
     Scaffold(
         topBar = {
