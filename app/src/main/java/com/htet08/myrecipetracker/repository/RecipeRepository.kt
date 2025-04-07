@@ -2,7 +2,7 @@ package com.htet08.myrecipetracker.repository
 
 import com.htet08.myrecipetracker.data.dao.RecipeDao
 import com.htet08.myrecipetracker.data.entities.InstructionStepEntity
-import com.htet08.myrecipetracker.data.entities.RecipeEntity
+import com.htet08.myrecipetracker.data.entities.Recipe
 import com.htet08.myrecipetracker.data.entities.RecipeTagCrossRef
 import com.htet08.myrecipetracker.data.entities.RecipeWithStepsAndTags
 import com.htet08.myrecipetracker.data.entities.TagEntity
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 class RecipeRepository(private val recipeDao: RecipeDao) {
 
     suspend fun saveRecipe(
-        recipe: RecipeEntity,
+        recipe: Recipe,
         steps: List<InstructionStepEntity>,
         tags: List<TagEntity>
     ): Long {

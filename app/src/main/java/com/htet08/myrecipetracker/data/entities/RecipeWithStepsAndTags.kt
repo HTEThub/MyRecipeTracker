@@ -5,7 +5,7 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 data class RecipeWithStepsAndTags(
-    @Embedded val recipe: RecipeEntity,
+    @Embedded val recipe: Recipe,
     @Relation(
         parentColumn = "id",
         entity = TagEntity::class,

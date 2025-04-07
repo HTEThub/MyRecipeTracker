@@ -14,11 +14,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.htet08.myrecipetracker.data.entities.RecipeEntity
+import com.htet08.myrecipetracker.data.entities.Recipe
 
 @Composable
 fun RecipeCard(
-    recipe: RecipeEntity,
+    recipe: Recipe,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -58,7 +58,7 @@ fun RecipeCard(
 @Composable
 fun RecipeCardPreview() {
     // Sample RecipeEntity for preview purposes.
-    val sampleRecipe = RecipeEntity(
+    val sampleRecipe = Recipe(
         id = 1,
         title = "Sample Recipe",
         ingredients = "Ingredients list...",

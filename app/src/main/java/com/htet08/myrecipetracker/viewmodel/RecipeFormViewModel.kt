@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.htet08.myrecipetracker.data.entities.InstructionStepEntity
-import com.htet08.myrecipetracker.data.entities.RecipeEntity
+import com.htet08.myrecipetracker.data.entities.Recipe
 import com.htet08.myrecipetracker.data.entities.TagEntity
 import com.htet08.myrecipetracker.repository.RecipeRepository
 import com.htet08.myrecipetracker.model.CustomTag
@@ -50,8 +50,8 @@ class RecipeFormViewModel(private val repository: RecipeRepository) : ViewModel(
 
     fun saveRecipeToDatabase() {
         viewModelScope.launch {
-            // Build the RecipeEntity from UI input
-            val recipe = RecipeEntity(
+            // Build the Recipe from UI input
+            val recipe = Recipe(
                 title = title.value,
                 ingredients = ingredients.value,
                 imageUri = imageUri.value?.toString()

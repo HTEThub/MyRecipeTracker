@@ -1,15 +1,24 @@
-package com.htet08.myrecipetracker.data
-
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.htet08.myrecipetracker.data.RecipeDao
-import com.htet08.myrecipetracker.data.RecipeEntity
+import com.htet08.myrecipetracker.data.dao.RecipeDao
+import com.htet08.myrecipetracker.data.entities.InstructionStepEntity
+import com.htet08.myrecipetracker.data.entities.Recipe
+import com.htet08.myrecipetracker.data.entities.RecipeTagCrossRef
+import com.htet08.myrecipetracker.data.entities.TagEntity
 
-@Database(entities = [RecipeEntity::class], version = 1)
+@Database(
+    entities = [
+        Recipe::class,
+        InstructionStepEntity::class,
+        TagEntity::class,
+        RecipeTagCrossRef::class
+    ],
+    version = 1,
+    exportSchema = false
+)
 abstract class RecipeDatabase : RoomDatabase() {
-
     abstract fun recipeDao(): RecipeDao
 
     companion object {
@@ -22,13 +31,12 @@ abstract class RecipeDatabase : RoomDatabase() {
                     context.applicationContext,
                     RecipeDatabase::class.java,
                     "recipe_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration() // For development
+                    .build()
                 INSTANCE = instance
                 instance
             }
         }
     }
 }
-
-
-

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipe(recipe: RecipeEntity): Long
+    suspend fun insertRecipe(recipe: Recipe): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInstructionSteps(steps: List<InstructionStepEntity>)
