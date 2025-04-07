@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.htet08.myrecipetracker.navigation.Routes
+import com.htet08.myrecipetracker.ui.components.PillShapedSearchBar
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SavedRecipesScreen(
     navController: NavHostController,
@@ -57,29 +59,13 @@ fun SavedRecipesScreen(
         ) {
             // The Column below holds fixed elements (search bar and clear button) and a scrollable list.
             Column(modifier = Modifier.fillMaxSize()) {
-                // Fixed Search Bar with Filter Icon
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    TextField(
-                        value = searchQuery,
-                        onValueChange = { searchQuery = it },
-                        placeholder = { Text("Search recipes...") },
-                        modifier = Modifier.weight(1f)
-                    )
-                    IconButton(
-                        onClick = { /* TODO: add filter functionality later */ },
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.FilterList,
-                            contentDescription = "Filter Settings"
-                        )
-                    }
-                }
+                // Fixed Pill-Shaped Search Bar with filter tool
+                PillShapedSearchBar(
+                    query = searchQuery,
+                    onQueryChange = { searchQuery = it },
+                    onFilterClick = { /* TODO: add filter functionality later */ },
+                    onSearchClick = { /* TODO: add filter functionality later */ }
+                )
                 // Fixed Clear Saved Recipes Button
                 Button(
                     onClick = {
