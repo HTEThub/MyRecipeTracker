@@ -10,11 +10,16 @@ import com.htet08.myrecipetracker.data.entities.TagEntity
 import com.htet08.myrecipetracker.repository.RecipeRepository
 import com.htet08.myrecipetracker.model.CustomTag
 import com.htet08.myrecipetracker.model.InstructionStepData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class RecipeFormViewModel(private val repository: RecipeRepository) : ViewModel() {
 
     val savedRecipesFlow = repository.getAllRecipes()
+
+    private val _cookingHistoryFlow = MutableStateFlow<List<Recipe>>(emptyList())
+    val cookingHistoryFlow: StateFlow<List<Recipe>> = _cookingHistoryFlow
 
 
     // Existing UI state fields
@@ -117,5 +122,14 @@ class RecipeFormViewModel(private val repository: RecipeRepository) : ViewModel(
         viewModelScope.launch {
             repository.clearSavedRecipes()
         }
+    }
+
+    fun saveToCookingHistory(recipe: Recipe) {
+        // Add the recipe to the cooking history list.
+        _cookingHistoryFlow.value = _cookingHistoryFlow.value + recipe
+    }
+
+    fun clearCookingHistory() {
+        _cookingHistoryFlow.value = emptyList()
     }
 }

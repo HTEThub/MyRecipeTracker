@@ -12,41 +12,55 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.htet08.myrecipetracker.navigation.Routes
+import com.htet08.myrecipetracker.ui.components.CookingRecipeCard
 import com.htet08.myrecipetracker.ui.components.PillShapedSearchBar
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
-import com.htet08.myrecipetracker.ui.components.RecipeCard
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.ui.components.FilterPopup
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 import kotlinx.coroutines.launch
 
+// Dummy data class representing a cooking history record.
+// Adjust fields as necessary.
+data class CookingHistoryItem(
+    val id: Long,
+    val recipeTitle: String,
+    val cookedOn: String // Could be a formatted date.
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SavedRecipesScreen(
+fun CookingHistoryScreen(
     navController: NavHostController,
     viewModel: RecipeFormViewModel
 ) {
-    // Collect saved recipes from the viewModel.
-    val recipes by viewModel.savedRecipesFlow.collectAsState(initial = emptyList())
+    // For demonstration, we'll use a dummy list. In a real implementation, you might have:
+    // val historyItems by viewModel.cookingHistoryFlow.collectAsState(initial = emptyList())
+    val historyItems = listOf(
+        CookingHistoryItem(1, "Spaghetti Carbonara", "2025-03-25"),
+        CookingHistoryItem(2, "Chicken Alfredo", "2025-03-27"),
+        CookingHistoryItem(3, "Vegetable Stir Fry", "2025-04-01")
+    )
+
+    val cookingHistory by viewModel.cookingHistoryFlow.collectAsState()
+
     // Snackbar host for messages.
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
     // UI-only search query state.
     var searchQuery by remember { mutableStateOf("") }
     // Controls whether the filter popup is visible.
     var showFilterPopup by remember { mutableStateOf(false) }
-    // Local filter state: these hold the selections applied to filtering.
+    // Local filter state.
     var appliedCustomFilters by remember { mutableStateOf(emptyList<String>()) }
     var appliedDietaryFilters by remember { mutableStateOf(emptyList<String>()) }
 
-    // Local states for editing filter selections (used only in the popup).
-    // They are initialized when the popup is shown.
+    // Local states for editing filter selections.
     var localCustomTags by remember { mutableStateOf<List<com.htet08.myrecipetracker.model.CustomTag>>(emptyList()) }
     var localDietaryTags by remember { mutableStateOf<List<com.htet08.myrecipetracker.model.CustomTag>>(emptyList()) }
 
-    // When the filter popup is opened, initialize local states from viewModel.
     if (showFilterPopup) {
-        // Initialize local copies only once.
         LaunchedEffect(Unit) {
             localCustomTags = viewModel.customTags.value.toList()
             localDietaryTags = viewModel.dietaryTags.value.toList()
@@ -56,20 +70,19 @@ fun SavedRecipesScreen(
     // Combine applied filters from custom and dietary selections.
     val appliedFilters = appliedCustomFilters + appliedDietaryFilters
 
-    // Filter recipes based on appliedFilters.
-    // Assume each recipeWithDetails has a list of tags (from the relation) that are TagEntity with a 'text' field.
-    val filteredRecipes = if (appliedFilters.isEmpty()) {
-        recipes
+    // Dummy filtering logic, adjust as needed.
+    val filteredHistoryItems = if (appliedFilters.isEmpty()) {
+        historyItems
     } else {
-        recipes.filter { recipeWithDetails ->
-            recipeWithDetails.tags.any { tag -> tag.text in appliedFilters }
+        historyItems.filter { item ->
+            appliedFilters.any { filter -> item.recipeTitle.contains(filter, ignoreCase = true) }
         }
     }
 
     Scaffold(
         topBar = {
             RecipeTopAppBar(
-                title = "Saved Recipes",
+                title = "Cooking History",
                 leftContent = {
                     TextButton(
                         onClick = { navController.popBackStack(Routes.HOME, inclusive = false) }
@@ -89,43 +102,40 @@ fun SavedRecipesScreen(
                 .padding(innerPadding)
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                // Pill-shaped search bar with filter icon.
                 PillShapedSearchBar(
                     query = searchQuery,
                     onQueryChange = { searchQuery = it },
                     onFilterClick = { showFilterPopup = true },
                     onSearchClick = { /* Optionally implement search button click */ }
                 )
-                // Clear Saved Recipes Button.
+                // Example button to clear cooking history (or perform any other action)
                 Button(
                     onClick = {
-                        viewModel.clearSavedRecipes()
+                        viewModel.clearCookingHistory()
                         coroutineScope.launch {
-                            snackbarHostState.showSnackbar("Saved recipes cleared")
+                            snackbarHostState.showSnackbar("Cooking history cleared")
                         }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    Text("Clear Saved Recipes", fontSize = 18.sp)
+                    Text("Clear Cooking History", fontSize = 18.sp)
                 }
-                // Scrollable list of filtered recipes.
+                // List displaying cooking history records.
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                        .fillMaxSize()
+                        .padding(innerPadding)
                 ) {
-                    items(filteredRecipes) { recipeWithDetails ->
-                        RecipeCard(
-                            recipe = recipeWithDetails.recipe,
-                            modifier = Modifier.padding(16.dp),
-                            onSaveToHistory = { viewModel.saveToCookingHistory(recipeWithDetails.recipe) }
+                    items(cookingHistory) { recipe ->
+                        CookingRecipeCard(
+                            recipe = recipe,
+                            modifier = Modifier.padding(16.dp)
                         )
                     }
                 }
             }
-            // Filter Popup: display only if showFilterPopup is true.
             if (showFilterPopup) {
                 FilterPopup(
                     customTags = localCustomTags,
@@ -144,7 +154,6 @@ fun SavedRecipesScreen(
                     },
                     onDismissRequest = { showFilterPopup = false },
                     onApplyFilters = {
-                        // When applying filters, update the appliedFilters state.
                         appliedCustomFilters = localCustomTags.filter { it.selected }.map { it.text }
                         appliedDietaryFilters = localDietaryTags.filter { it.selected }.map { it.text }
                         showFilterPopup = false
@@ -154,3 +163,5 @@ fun SavedRecipesScreen(
         }
     }
 }
+
+

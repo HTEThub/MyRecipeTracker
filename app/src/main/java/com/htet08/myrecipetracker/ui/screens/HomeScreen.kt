@@ -97,7 +97,7 @@ fun RecipeMainMenu(navController: NavHostController, modifier: Modifier = Modifi
             Spacer(modifier = Modifier.size(30.dp))
 
             Button(
-                onClick = { /* TODO: Navigate to Cooking History */ },
+                onClick = { navController.navigate(Routes.COOKING_HISTORY) },
                 modifier = Modifier
                     .width(150.dp)
                     .height(175.dp),

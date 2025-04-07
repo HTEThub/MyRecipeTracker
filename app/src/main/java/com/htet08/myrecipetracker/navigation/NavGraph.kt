@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.htet08.myrecipetracker.ui.screens.CreateRecipeScreen.AddTagsToRecipeScreen
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 import androidx.compose.ui.platform.LocalContext
+import com.htet08.myrecipetracker.ui.screens.CookingHistoryScreen
 import com.htet08.myrecipetracker.ui.screens.SavedRecipesScreen
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModelFactory
 
@@ -54,6 +55,14 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
         // New route for saved recipes
         composable(Routes.SAVED_RECIPES) {
             SavedRecipesScreen(
+                navController = navController,
+                viewModel = recipeFormViewModel
+            )
+        }
+
+        // New route for Cooking History.
+        composable(Routes.COOKING_HISTORY) {
+            CookingHistoryScreen(
                 navController = navController,
                 viewModel = recipeFormViewModel
             )
