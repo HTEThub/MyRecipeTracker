@@ -7,4 +7,5 @@ object Routes {
     const val COOKING_HISTORY = "cooking_history"
     const val ADD_TAGS = "add_tags"
     const val HOME = "home"
+    const val SAVED_RECIPES = "saved_recipes" // New route
 }

@@ -51,12 +51,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.htet08.myrecipetracker.R
 import com.htet08.myrecipetracker.model.InstructionStepData
 import com.htet08.myrecipetracker.navigation.Routes
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
 import com.htet08.myrecipetracker.ui.components.ConfirmDialogPopup
-
+import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModelFactory
 
 
 @Composable
@@ -488,13 +489,16 @@ fun InstructionStep(
 }
 
 
-@Preview(showBackground = true, heightDp = 1000, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateRecipeScreenPreview() {
+    val context = LocalContext.current
+    val viewModelFactory = RecipeFormViewModelFactory(context)
+    val viewModel: RecipeFormViewModel = viewModel(factory = viewModelFactory)
     val navController = rememberNavController()
-    val dummyViewModel = remember { RecipeFormViewModel() }
     CreatingRecipeScreen(
         navController = navController,
-        viewModel = dummyViewModel)
+        viewModel = viewModel
+    )
 }
 

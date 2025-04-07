@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,6 +73,8 @@ dependencies {
     implementation("androidx.compose.foundation:foundation") // ✅ Explicitly include foundation
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation ("androidx.compose.material:material-icons-extended:<compose_version>")
+
 
 
 

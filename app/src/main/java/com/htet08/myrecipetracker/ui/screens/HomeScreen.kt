@@ -67,7 +67,7 @@ fun RecipeMainMenu(navController: NavHostController, modifier: Modifier = Modifi
                 }
 
                 Button(
-                    onClick = { /* TODO: Navigate to Recipe List */ },
+                    onClick = { navController.navigate(Routes.SAVED_RECIPES) },
                     modifier = Modifier
                         .width(150.dp)
                         .height(175.dp),

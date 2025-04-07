@@ -47,12 +47,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.htet08.myrecipetracker.model.CustomTag
@@ -60,6 +62,7 @@ import com.htet08.myrecipetracker.navigation.Routes
 import com.htet08.myrecipetracker.ui.components.RecipeBottomAppBar
 import com.htet08.myrecipetracker.ui.components.RecipeTopAppBar
 import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModel
+import com.htet08.myrecipetracker.viewmodel.RecipeFormViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -103,10 +106,10 @@ fun AddTagsToRecipeScreen(
                 snackbarHostState.showSnackbar("Please enter a title before saving your recipe.")
             }
         } else {
+            viewModel.saveRecipeToDatabase()
             coroutineScope.launch {
                 snackbarHostState.showSnackbar("Recipe saved successfully!")
             }
-            viewModel.clearForm()
             navController.popBackStack(Routes.HOME, inclusive = false)
         }
     }
@@ -128,8 +131,9 @@ fun AddTagsToRecipeScreen(
                     }
                 },
                 rightContent = {
+                    // Use our saveRecipe function on click
                     TextButton(onClick = {
-                        handleBackOrSave()
+                        // If you have any pending tag inputs, you could call handleBackOrSave() here.
                         saveRecipe()
                     }) {
                         Text(
@@ -373,11 +377,13 @@ fun TagChip(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AddTagsToRecipeScreenPreview() {
+fun AddTagsToRecipeScreen() {
+    val context = LocalContext.current
+    val viewModelFactory = RecipeFormViewModelFactory(context)
+    val viewModel: RecipeFormViewModel = viewModel(factory = viewModelFactory)
     val navController = rememberNavController()
-    val dummyViewModel = remember { RecipeFormViewModel() }
-    AddTagsToRecipeScreen(
+    CreatingRecipeScreen(
         navController = navController,
-        viewModel = dummyViewModel
+        viewModel = viewModel
     )
 }
