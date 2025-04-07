@@ -58,12 +58,11 @@ fun SavedRecipesScreen(
 
     // Filter recipes based on appliedFilters.
     // Assume each recipeWithDetails has a list of tags (from the relation) that are TagEntity with a 'text' field.
-    val filteredRecipes = if (appliedFilters.isEmpty()) {
-        recipes
-    } else {
-        recipes.filter { recipeWithDetails ->
-            recipeWithDetails.tags.any { tag -> tag.text in appliedFilters }
-        }
+    val filteredRecipes = recipes.filter { recipeWithDetails ->
+        val matchesQuery = recipeWithDetails.recipe.title.contains(searchQuery, ignoreCase = true)
+        val matchesFilters = appliedFilters.isEmpty() || recipeWithDetails.tags.any { it.text in appliedFilters }
+
+        matchesQuery && matchesFilters
     }
 
     Scaffold(

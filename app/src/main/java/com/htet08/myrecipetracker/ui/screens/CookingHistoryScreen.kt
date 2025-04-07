@@ -34,14 +34,6 @@ fun CookingHistoryScreen(
     navController: NavHostController,
     viewModel: RecipeFormViewModel
 ) {
-    // For demonstration, we'll use a dummy list. In a real implementation, you might have:
-    // val historyItems by viewModel.cookingHistoryFlow.collectAsState(initial = emptyList())
-    val historyItems = listOf(
-        CookingHistoryItem(1, "Spaghetti Carbonara", "2025-03-25"),
-        CookingHistoryItem(2, "Chicken Alfredo", "2025-03-27"),
-        CookingHistoryItem(3, "Vegetable Stir Fry", "2025-04-01")
-    )
-
     val cookingHistory by viewModel.cookingHistoryFlow.collectAsState()
 
     // Snackbar host for messages.
@@ -67,16 +59,13 @@ fun CookingHistoryScreen(
         }
     }
 
-    // Combine applied filters from custom and dietary selections.
     val appliedFilters = appliedCustomFilters + appliedDietaryFilters
 
-    // Dummy filtering logic, adjust as needed.
-    val filteredHistoryItems = if (appliedFilters.isEmpty()) {
-        historyItems
-    } else {
-        historyItems.filter { item ->
-            appliedFilters.any { filter -> item.recipeTitle.contains(filter, ignoreCase = true) }
-        }
+    val filteredHistoryItems = cookingHistory.filter { recipe ->
+        recipe.title.contains(searchQuery, ignoreCase = true) &&
+                (appliedFilters.isEmpty() || appliedFilters.any { filter ->
+                    recipe.ingredients.contains(filter, ignoreCase = true) || recipe.title.contains(filter, ignoreCase = true)
+                })
     }
 
     Scaffold(
@@ -128,7 +117,7 @@ fun CookingHistoryScreen(
                         .fillMaxSize()
                         .padding(innerPadding)
                 ) {
-                    items(cookingHistory) { recipe ->
+                    items(filteredHistoryItems) { recipe ->
                         CookingRecipeCard(
                             recipe = recipe,
                             modifier = Modifier.padding(16.dp)
